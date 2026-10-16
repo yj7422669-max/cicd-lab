@@ -7,8 +7,8 @@ resources:
 - ../../base
 images:
 - name: todo-api
-  newName: ghcr.io/<아이디>/cicd-lab/api
+  newName: ghcr.io/yj7422669-max/cicd-lab/api
   newTag: main
 - name: todo-web
-  newName: ghcr.io/<아이디>/cicd-lab/web
+  newName: ghcr.io/yj7422669-max/cicd-lab/web
   newTag: main
