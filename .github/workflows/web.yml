@@ -67,3 +67,27 @@ jobs:
           tags: |
             ${{ steps.img.outputs.name }}:${{ github.sha }}
             ${{ steps.img.outputs.name }}:main
+
+  deploy-dev:
+    needs: push
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: dev 매니페스트 이미지 태그 갱신
+        run: |
+          cd deploy/overlays/dev
+          kustomize edit set image todo-web=ghcr.io/${GITHUB_REPOSITORY,,}/web:${GITHUB_SHA}
+
+      - name: Git 작성자 설정
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: 변경사항 커밋 및 push
+        run: |
+          git add deploy/overlays/dev/kustomization.yaml
+          git commit -m "deploy(dev): web ${GITHUB_SHA::7}"
+          git push
